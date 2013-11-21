@@ -12,6 +12,7 @@ Dir.foreach(".") do |dir|
         if i == 2
           words = line.split(' ')
           box_length = dir.length
+          words[1] = words[1] + " " if words[1] == "running"
           if box_length > 9 && box_length < 17
             puts "#{dir}\t\t\t#{words[1]}\t\t#{words[2][1..-2]}\t\t\t#{words[0]}"
           elsif box_length > 17
