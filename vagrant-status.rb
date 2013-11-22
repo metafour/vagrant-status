@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 
-puts "box\t\t\t\tstatus\t\t\tprovider\t\t\tstate"
-puts "---\t\t\t\t------\t\t\t--------\t\t\t-----"
+# box length is limited to 30 characters
+
+puts "box\t\t\t\tstatus\t\t\tprovider\t\tstate"
+puts "---\t\t\t\t------\t\t\t--------\t\t-----"
+
+spacer = "                               "
 
 Dir.foreach(".") do |dir|
   if Dir.exists? dir
@@ -11,14 +15,11 @@ Dir.foreach(".") do |dir|
       IO.popen(["vagrant", "status"]).each do |line|
         if i == 2
           words = line.split(' ')
-          box_length = dir.length
-          words[1] = words[1] + " " if words[1] == "running"
-          if box_length > 9 && box_length < 17
-            puts "#{dir}\t\t\t#{words[1]}\t\t#{words[2][1..-2]}\t\t\t#{words[0]}"
-          elsif box_length > 17
-            puts "#{dir}\t#{words[1]}\t\t#{words[2][1..-2]}\t\t\t#{words[0]}"
+          spaces = 31 - dir.length
+          if spaces <= 0
+            puts dir[0..30] + "…" + words[1] + spacer[0..(23 - words[1].length)] + words[2][1..-2] + spacer[0..(23 - words[2][1..-2].length)] + words[0]
           else
-            puts "#{dir}\t\t#{words[1]}\t\t#{words[2][1..-2]}\t\t\t#{words[0]}"
+            puts dir + spacer[0..(31 - dir.length)] + words[1] + spacer[0..(23 - words[1].length)] + words[2][1..-2] + spacer[0..(23 - words[2][1..-2].length)] + words[0]
           end
         end
         i += 1
